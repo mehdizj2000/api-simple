@@ -1,0 +1,36 @@
+swagger: "2.0"
+info:
+  description: "Endpoint for my first api"
+  title: "Endpoints First API"
+  version: "1.0.0"
+host: "api-simple.endpoints.potent-terminal-298905.cloud.goog"
+consumes:
+- "application/json"
+produces:
+- "application/json"
+schemes:
+- "http"  
+paths:
+  /v1/search/{term}:
+    get:
+      operationId: getResponse-mehdi-goozpich
+      parameters:
+      - name: term
+        in: path
+        required: true
+        type: string
+      security:
+      - api_key: []
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+definitions:
+  echoMessage:
+    type: "string"
+securityDefinitions:
+  api_key:
+    type: "apiKey"
+    name: "key"
+    in: "query"
