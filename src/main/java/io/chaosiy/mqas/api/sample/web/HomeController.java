@@ -14,4 +14,9 @@ public class HomeController {
 		return "Search for: " + term;
 	}
 
+	@GetMapping("/echo")
+	public String echoecho() {
+		return "echo echo: ";
+	}
+
 }

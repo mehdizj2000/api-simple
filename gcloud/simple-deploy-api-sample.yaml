@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-sample-deploy
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: api-sample
+  template:
+    metadata:
+      labels:
+        app: api-sample
+    spec:
+      containers:
+      - name: esp
+        image: gcr.io/endpoints-release/endpoints-runtime:2
+        args:
+        - --http_port=8081
+        - --backend=127.0.0.1:8080
+        - --service=api-simple.endpoints.potent-terminal-298905.cloud.goog
+        - --rollout_strategy=managed
+        ports:
+        - containerPort: 8081
+        readinessProbe:
+          tcpSocket:
+            port: 8081
+          initialDelaySeconds: 60
+          periodSeconds: 10
+        livenessProbe:
+          tcpSocket:
+            port: 8081
+          initialDelaySeconds: 65
+          periodSeconds: 20
+      - name: api-sample-cnt
+        image: mehdizj2000/api-sample
+        ports:
+        - containerPort: 8080
+        readinessProbe:
+          httpGet:
+            path: /actuator/health/readiness
+            port: 8080
+          initialDelaySeconds: 10
+          timeoutSeconds: 2
+          periodSeconds: 3
+          failureThreshold: 1
+        livenessProbe:
+          httpGet:
+            path: /actuator/health/liveness
+            port: 8080
+          initialDelaySeconds: 20
+          timeoutSeconds: 2
+          periodSeconds: 8
+          failureThreshold: 1
+          
